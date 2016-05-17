@@ -1,0 +1,27 @@
+{
+  "name": "art-kit",
+  "version": "0.0.0",
+  "description": "A collection of helpers for making animations in the browser",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gunderson/art-kit.git"
+  },
+  "keywords": [
+    "netart",
+    "art",
+    "motion",
+    "browserart",
+    "requestanimationframe",
+    "animation"
+  ],
+  "author": "Patrick Gunderson",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gunderson/art-kit/issues"
+  },
+  "homepage": "https://github.com/gunderson/art-kit#readme"
+}
