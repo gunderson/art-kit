@@ -34,3 +34,4 @@ node_modules
 
 # Fuck you OS X
 .DS_Store
+thumbs.db

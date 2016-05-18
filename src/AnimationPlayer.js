@@ -50,3 +50,4 @@ class AnimationPlayer {
 }
 
 module && module.exports && module.exports = AnimationPlayer;
+return AnimationPlayer;
