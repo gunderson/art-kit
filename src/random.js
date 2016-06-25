@@ -23,5 +23,4 @@ function random( min, max, seed ) {
 	return min + ( range * _z_ / _m_ );
 }
 
-( module && module.exports ) && module.exports = random;
-return random;
+module.exports = random;

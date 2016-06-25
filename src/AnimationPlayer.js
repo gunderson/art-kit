@@ -2,11 +2,16 @@
 'use strict';
 
 class AnimationPlayer {
-	constructor( update ) {
+	constructor( update, draw ) {
 		this.timeout = null;
+		this.raf = null;
 		this.currentTime = 0;
 		this.fps = 60;
-		this.update = update || this.update;
+		this._update = update || this._update;
+		this._draw = draw || this._draw;
+
+		this.update = this.update.bind( this );
+		this.draw = this.draw.bind( this );
 	}
 
 	set fps( val ) {
@@ -17,11 +22,13 @@ class AnimationPlayer {
 	play() {
 		if ( this.timeout ) return;
 		this.lastTickTime = Date.now();
-		this.loop();
+		this.update();
+		this.draw();
 	}
 
 	stop() {
 		clearTimeout( this.timeout );
+		clearAnimtionFrame( this.raf );
 		this.timeout = null;
 	}
 
@@ -30,7 +37,7 @@ class AnimationPlayer {
 		this.currentTime = 0;
 	}
 
-	loop() {
+	update() {
 		var now = Date.now();
 		var loopTime = now - this.lastLoopTime;
 
@@ -42,12 +49,17 @@ class AnimationPlayer {
 
 		this.lastLoopTime = now;
 
-		this.timeout = setTimeout( this.loop.bind( this ), timeToNextTick );
-		this.update();
+		this.timeout = setTimeout( this.update, timeToNextTick );
+		this._update();
 	}
 
-	update() {}
+	draw() {
+		this._draw();
+		this.raf = requestAnimationFrame( draw );
+	}
+
+	_update() {}
+	_draw() {}
 }
 
-module && module.exports && module.exports = AnimationPlayer;
-return AnimationPlayer;
+module.exports = AnimationPlayer;
