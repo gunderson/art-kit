@@ -103,3 +103,5 @@ class MouseTelemetrics {
 		return MouseTelemetrics.average( this.buffer.map( ( state ) => state.angle ) );
 	};
 }
+
+module.exports = MouseTelemetrics;
