@@ -3,6 +3,7 @@ Math.TAU = Math.PI * 2;
 
 class MouseTelemetrics {
 	constructor( options ) {
+		options = options || {};
 		this.el = options.el || window;
 		this.bufferLength = options.bufferLength || 4;
 
@@ -23,8 +24,8 @@ class MouseTelemetrics {
 	};
 
 	updateBounds() {
-		if ( el !== window ) {
-			return this.bounds = el.getClientBoundingRect();
+		if ( this.el !== window ) {
+			return this.bounds = this.el.getClientBoundingRect();
 		} else {
 			return this.bounds = {
 				top: 0,
@@ -43,7 +44,7 @@ class MouseTelemetrics {
 			y: e.clientY
 		};
 
-		if ( el !== window ) {
+		if ( this.el !== window ) {
 			state.x += this.bounds.top - window.pageYOffset;
 			state.y += this.bounds.left - window.pageXOffset;
 		}
