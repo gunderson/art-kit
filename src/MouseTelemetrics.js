@@ -55,11 +55,13 @@ class MouseTelemetrics {
 		state.ratioCenterX = 2 * ( state.ratioX - 0.5 );
 		state.ratioCenterY = 2 * ( state.ratioY - 0.5 );
 
-		var dx = state.dx = MouseTelemetrics.delta( state.x, this.buffer[ 0 ].x );
-		var dy = state.dy = MouseTelemetrics.delta( state.y, this.buffer[ 0 ].y );
+		if ( buffer.length > 1 ) {
+			var dx = state.dx = MouseTelemetrics.delta( state.x, this.buffer[ 0 ].x );
+			var dy = state.dy = MouseTelemetrics.delta( state.y, this.buffer[ 0 ].y );
 
-		state.angle = MouseTelemetrics.angle( dx, dy );
-		state.speed = MouseTelemetrics.speed( dx, dy );;
+			state.angle = MouseTelemetrics.angle( dx, dy );
+			state.speed = MouseTelemetrics.speed( dx, dy );;
+		}
 
 		this.buffer.unshift( state );
 		if ( buffer.length > this.bufferLength ) {
