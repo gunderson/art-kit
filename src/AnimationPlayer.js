@@ -28,7 +28,7 @@ class AnimationPlayer {
 
 	stop() {
 		clearTimeout( this.timeout );
-		clearAnimtionFrame( this.raf );
+		cancelAnimtionFrame( this.raf );
 		this.timeout = null;
 	}
 
@@ -55,7 +55,7 @@ class AnimationPlayer {
 
 	draw() {
 		this._draw();
-		this.raf = requestAnimationFrame( draw );
+		this.raf = requestAnimationFrame( this.draw );
 	}
 
 	_update() {}

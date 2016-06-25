@@ -65,7 +65,7 @@ class MouseTelemetrics {
 		}
 
 		this.buffer.unshift( state );
-		if ( buffer.length > this.bufferLength ) {
+		if ( this.buffer.length > this.bufferLength ) {
 			this.buffer.pop();
 		}
 		return this._state = state;
