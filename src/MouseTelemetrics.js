@@ -21,6 +21,7 @@ class MouseTelemetrics {
 			averageAngle: 0,
 			averageSpeed: 0
 		}
+		this.buffer = [];
 	};
 
 	updateBounds() {
