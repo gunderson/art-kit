@@ -28,7 +28,7 @@ class AnimationPlayer {
 
 	stop() {
 		clearTimeout( this.timeout );
-		cancelAnimtionFrame( this.raf );
+		cancelAnimationFrame( this.raf );
 		this.timeout = null;
 	}
 
