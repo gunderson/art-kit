@@ -55,7 +55,7 @@ class MouseTelemetrics {
 		state.ratioCenterX = 2 * ( state.ratioX - 0.5 );
 		state.ratioCenterY = 2 * ( state.ratioY - 0.5 );
 
-		if ( buffer.length > 1 ) {
+		if ( this.buffer.length > 1 ) {
 			var dx = state.dx = MouseTelemetrics.delta( state.x, this.buffer[ 0 ].x );
 			var dy = state.dy = MouseTelemetrics.delta( state.y, this.buffer[ 0 ].y );
 
