@@ -21,7 +21,7 @@ class AnimationPlayer {
 
 	play() {
 		if ( this.timeout ) return;
-		this.lastTickTime = Date.now();
+		this.lastLoopTime = this.lastTickTime = Date.now();
 		this.update();
 		this.draw();
 	}
@@ -42,7 +42,7 @@ class AnimationPlayer {
 		var loopTime = now - this.lastLoopTime;
 
 		this.currentTime += loopTime;
-		this.currentTick = Math.floor( this.currentTime / this.tickIntervalMillis );
+		this.currentTick = Math.round( this.currentTime / this.tickIntervalMillis );
 
 		var nextTickTime = ( this.currentTick + 1 ) * this.tickIntervalMillis;
 		var timeToNextTick = nextTickTime - this.currentTime;

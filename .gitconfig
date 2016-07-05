@@ -1,0 +1,11 @@
+[user]
+	email = patrick@toolofna.com
+[alias]
+	add-commit = !git add -A && git commit
+[merge]
+	tool = atom
+[core]
+	editor = atop
+	ignorecase = false
+[push]
+	default = simple
