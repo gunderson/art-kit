@@ -3,9 +3,7 @@
 	"version": "0.0.9",
 	"description": "A collection of helpers for making animations in the browser",
 	"main": "index.js",
-	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1"
-	},
+	"scripts": {},
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/gunderson/art-kit.git"
