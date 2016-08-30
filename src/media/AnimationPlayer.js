@@ -1,7 +1,5 @@
-/* eslint-env es6 */
-'use strict';
-
-class AnimationPlayer {
+// for consistency all time is in milliseconds by default
+export default class AnimationPlayer {
 	constructor( update, draw ) {
 		this.timeout = null;
 		this.raf = null;
@@ -9,9 +7,30 @@ class AnimationPlayer {
 		this.fps = 60;
 		this._update = update || this._update;
 		this._draw = draw || this._draw;
-
+		this.duration = null;
+		this.lastLoopTime = -1;
 		this.update = this.update.bind( this );
 		this.draw = this.draw.bind( this );
+	}
+
+	get timeRemaining() {
+		if ( this.duration ) {
+			return this.duration - this.currentTime;
+		}
+		console.warn( 'duration must be set to find timeRemaining' );
+		return undefined;
+	}
+
+	get percentComplete() {
+		if ( this.duration ) {
+			return this.currentTime / this.duration;
+		}
+		console.warn( 'duration must be set to find percentComplete' );
+		return undefined;
+	}
+
+	get fps() {
+		return this._fps;
 	}
 
 	set fps( val ) {
@@ -50,7 +69,10 @@ class AnimationPlayer {
 		this.lastLoopTime = now;
 
 		this.timeout = setTimeout( this.update, timeToNextTick );
-		this._update();
+		this._update( {
+			currentTime: this.currentTime,
+			currentTick: this.currentTick
+		} );
 	}
 
 	draw() {
@@ -58,8 +80,6 @@ class AnimationPlayer {
 		this.raf = requestAnimationFrame( this.draw );
 	}
 
-	_update() {}
+	_update( data ) {}
 	_draw() {}
 }
-
-module.exports = AnimationPlayer;
