@@ -26,7 +26,7 @@
   },
   "homepage": "https://github.com/gunderson/art-kit#readme",
   "devDependencies": {
-    "babel-preset-es2015": "^6.9.0",
+    "babel-preset-es2015": "^6.18.0",
     "babelify": "^7.3.0",
     "browserify": "^13.1.1",
     "gulp": "^3.9.1",
