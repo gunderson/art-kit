@@ -33,7 +33,7 @@ export default class MouseTelemetrics {
 
 	updateBounds() {
 		if ( this.el !== window ) {
-			return ( this.bounds = this.el.getClientBoundingRect() );
+			return ( this.bounds = this.el.getBoundingClientRect() );
 		} else {
 			return ( this.bounds = {
 				top: 0,
