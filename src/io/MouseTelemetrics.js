@@ -47,14 +47,13 @@ export default class MouseTelemetrics {
 	update( e ) {
 		var state = {
 			event: e,
-			buffer: this.buffer,
-			x: e.clientX,
-			y: e.clientY
+			x: e.pageX,
+			y: e.pageY
 		};
 
 		if ( this.el !== window ) {
-			state.x += this.bounds.top - window.pageYOffset;
-			state.y += this.bounds.left - window.pageXOffset;
+			state.y -= this.bounds.top - window.pageYOffset;
+			state.x -= this.bounds.left - window.pageXOffset;
 		}
 
 		state.ratioX = state.x / this.bounds.width;
@@ -67,8 +66,8 @@ export default class MouseTelemetrics {
 			let [ dx, dy ] = delta( state.x, this.buffer[ 0 ].x, state.y, this.buffer[ 0 ].y );
 			state.dx = dx;
 			state.dy = dy;
-			state.angle = angle( dx, dy );
-			state.speed = dist( dx, dy );
+			state.angle = angle( state.x, state.y, this.buffer[ 0 ].x, this.buffer[ 0 ].y );
+			state.speed = dist( state.x, state.y, this.buffer[ 0 ].x, this.buffer[ 0 ].y );
 		}
 
 		buffer( this.buffer, state, this.bufferLength );
