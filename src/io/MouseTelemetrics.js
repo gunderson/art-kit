@@ -16,8 +16,6 @@ export default class MouseTelemetrics {
 		this.el = options.el || window;
 		this.bufferLength = options.bufferLength || 4;
 
-		this.bounds = this.updateBounds();
-
 		this._state = {
 			event: null,
 			buffer: [],
@@ -79,6 +77,15 @@ export default class MouseTelemetrics {
 
 	// -----------------------------------------------------
 	// Getters & Setters
+
+	set el( el ) {
+		this._el = el;
+		this.bounds = this.updateBounds();
+	}
+
+	get el() {
+		return this._el;
+	}
 
 	get state() {
 		return this._state;
