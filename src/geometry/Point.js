@@ -42,3 +42,12 @@ export default class Point {
 		return mean( this.bufferY );
 	}
 }
+
+export function midpoint( x0, y0, x1, y1 ) {
+	let halfdx = 0.5 * ( x1 - x0 );
+	let halfdy = 0.5 * ( y1 - y0 );
+	return {
+		x: x0 + halfdx,
+		y: y0 + halfdy
+	};
+}
