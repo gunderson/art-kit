@@ -10,9 +10,10 @@ var _z_ = 123456789;
 
 export function random( min = 0, max = 1, seed ) {
 	if ( seed ) {
-		_z_ = seed;
 	}
 	let range = max - min;
 	_z_ = ( _a_ * _z_ + _c_ ) % _m_;
 	return min + ( range * _z_ / _m_ );
 }
+
+random.setSeed = ( seed ) => ( _z_ = seed );
