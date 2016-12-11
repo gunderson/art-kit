@@ -8,8 +8,17 @@ var _m_ = 4294967296,
 // Setting the seed
 var _z_ = 123456789;
 
-export function random( min = 0, max = 1, seed ) {
-	if ( seed ) {
+export function random( min = 0, max, seed ) {
+	// seed is optional
+	if ( typeof seed === 'number' ) {
+		random.setSeed( seed );
+	}
+	// make max optional
+	if ( min !== undefined && max === undefined ) {
+		max = min;
+		min = 0;
+	} else {
+		max = max || 1;
 	}
 	let range = max - min;
 	_z_ = ( _a_ * _z_ + _c_ ) % _m_;
