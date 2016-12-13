@@ -1,6 +1,6 @@
 {
   "name": "art-kit",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "A collection of helpers for making animations in the browser",
   "main": "index.js",
   "scripts": {
