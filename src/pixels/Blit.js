@@ -1,4 +1,4 @@
-export function blit {
+export function blit() {
 	constructor( canvas, x = 0, y = 0, width, height ) {
 		width = width || canvas.width;
 		height = height || canvas.height;

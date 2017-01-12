@@ -8,7 +8,7 @@ var _m_ = 4294967296,
 // Setting the seed
 var _z_ = 123456789;
 
-export function random( min = 0, max, seed ) {
+export default function random( min = 0, max, seed ) {
 	// seed is optional
 	if ( typeof seed === 'number' ) {
 		random.setSeed( seed );

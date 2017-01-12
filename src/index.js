@@ -2,56 +2,43 @@ import {
 	buffer,
 	sampleFn
 } from './Util';
-import {
-	Arc,
-	Bezier,
-	Point
-} from './geometry';
 
-import {
+import * as Arc from './geometry/Arc';
+import * as Path from './geometry/Path';
+import * as Point from './geometry/Point';
 
-	MouseTelemetrics,
-	MouseWheel,
-	VirtualScroll,
-	WASD
-} from './io';
+import * as MouseTelemetrics from './io/MouseTelemetrics';
+// import * as MouseWheel from './io/MouseWheel';
+// import * as VirtualScroll from './io/VirtualScroll';
+// import * as WASD from './io/WASD';
 
-import {
-	Analysis,
-	Constants,
-	Random,
-	Range
-} from './math';
+import * as Analysis from './math/Analysis';
+import * as Constants from './math/Constants';
+import * as Random from './math/Random';
+import * as Range from './math/Range';
 
-import {
-	AnimationPlayer,
-	CuePoint,
-	Timeline
-} from './media';
+import * as AnimationPlayer from './media/AnimationPlayer';
+import * as CuePoint from './media/CuePoint';
+import * as Timeline from './media/Timeline';
 
-import {
-	SimplexNoise
-} from './noise';
+import * as SimplexNoise from './noise/SimplexNoise';
 
-import {
-	Color,
-	Colormap
-} from './pixels';
-import {
-	RelativePosition,
-	Telemetrics
-} from './position';
+import * as Color from './pixels/Color';
+import * as Colormap from './pixels/Colormap';
+
+import * as RelativePosition from './position/RelativePosition';
+import * as Telemetrics from './position/Telemetrics';
 
 export default {
 	buffer,
 	sampleFn,
 	Arc,
-	Bezier,
+	Path,
 	Point,
 	MouseTelemetrics,
-	MouseWheel,
-	VirtualScroll,
-	WASD,
+	// MouseWheel,
+	// VirtualScroll,
+	// WASD,
 	Analysis,
 	Constants,
 	Random,

@@ -1,5 +1,5 @@
-import Point from 'Point';
-import TAU from './math/Constants';
+import Point from './Point';
+import { TAU } from '../math/Constants';
 
 export class Arc {
 	constructor( radius, segments, close = true, startAngle = 0, endAngle = TAU, direction = 1 ) {

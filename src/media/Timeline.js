@@ -1,5 +1,5 @@
-import CuePoint from 'CuePoint';
-import CrossedForward from '../position/RelativePosition';
+import CuePoint from './CuePoint';
+import { CrossedForward } from '../position/RelativePosition';
 
 // for consistency all time is in milliseconds
 export default class Timeline {

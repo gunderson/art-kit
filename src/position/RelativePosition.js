@@ -10,7 +10,7 @@ module.exports = {
 	TriggerBetween
 };
 
-function TriggerBetween( x, px, start, end, onEntered, onLeft ) {
+export function TriggerBetween( x, px, start, end, onEntered, onLeft ) {
 	onEntered = onEntered || noop;
 	onLeft = onLeft || noop;
 	if ( Entered( x, px, start, end ) ) {
@@ -23,7 +23,7 @@ function TriggerBetween( x, px, start, end, onEntered, onLeft ) {
 	return false;
 }
 
-function IsBetween( x, start, end ) {
+export function IsBetween( x, start, end ) {
 	// flip if moving in reverse
 	if ( end < start ) {
 		var t = start;
@@ -33,21 +33,21 @@ function IsBetween( x, start, end ) {
 	return x >= start && x < end;
 }
 
-function Entered( x, px, start, end ) {
+export function Entered( x, px, start, end ) {
 	start = start || 0;
 	end = end || 1;
 	// if it is now between and was not between
 	return IsBetween( x, start, end ) && !IsBetween( px, start, end );
 }
 
-function Left( x, px, start, end ) {
+export function Left( x, px, start, end ) {
 	start = start || 0;
 	end = end || 1;
 	// if it was between and is now not between
 	return IsBetween( px, start, end ) && !IsBetween( x, start, end );
 }
 
-function Hopped( x, px, start, end ) {
+export function Hopped( x, px, start, end ) {
 	start = start || 0;
 	end = end || 1;
 	// if px is below the range and x is above the range
@@ -56,14 +56,14 @@ function Hopped( x, px, start, end ) {
 	return ( px < start && x >= end ) || ( px >= end && x < start );
 }
 
-function Crossed( x, px, target ) {
+export function Crossed( x, px, target ) {
 	if ( CrossedForward( x, px, target ) || CrossedReverse( x, px, target ) ) {
 		return true;
 	}
 	return false;
 }
 
-function CrossedForward( x, px, target ) {
+export function CrossedForward( x, px, target ) {
 	// was below and now above
 	if ( x > target && px <= target ) {
 		return true;
@@ -71,7 +71,7 @@ function CrossedForward( x, px, target ) {
 	return false;
 }
 
-function CrossedReverse( x, px, target ) {
+export function CrossedReverse( x, px, target ) {
 	// was above and now below
 	if ( x <= target && px > target ) {
 		return true;

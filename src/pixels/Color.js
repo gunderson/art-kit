@@ -1,6 +1,7 @@
 // supports 16bit color
 // tracks color in the RGB space
 
+// FIXME: this class doesn't do much yet.
 
 export default class Color {
 	constructor( r, g, b, a, mode = 'rgb' ) {
@@ -12,16 +13,15 @@ export default class Color {
 		if ( r === undefined ) return this;
 
 		if ( r && g === undefined && b === undefined ) {
-			{
-				r,
-				g,
-				b
-			} = Color.parseColor( r );
+			let c = Color.parseColor( r );
+			r = c.r;
+			g = c.g;
+			b = c.b;
 		}
 
 		switch ( mode ) {
 			case 'hsl':
-				this.setHSL( r, g, b, a );
+				this.setHSL( r, g, b );
 				break;
 			case 'rgb':
 			default:

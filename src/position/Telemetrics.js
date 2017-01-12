@@ -19,7 +19,7 @@ export function delta( x0, y0, x1, y1 ) {
 }
 
 export function normalizeAngle( rad ) {
-	return TAU + ( rad % TAU );
+	return ( TAU + rad ) % TAU;
 }
 
 export function d2r( deg ) {

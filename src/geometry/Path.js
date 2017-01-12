@@ -1,5 +1,5 @@
-import midpoint from './Point';
-import lerp from '../math/Range';
+import { midpoint } from './Point';
+import { lerp } from '../math/Range';
 
 export function length( path ) {}
 
