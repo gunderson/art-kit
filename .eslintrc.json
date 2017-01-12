@@ -16,9 +16,7 @@
 		"document": false,
 		"navigator": false,
 		"window": false,
-		"TEMPLATES": true,
-		"GLOBALS": true,
-		"APP": true
+		"globals": true
 	},
 	"rules": {
 		"accessor-pairs": 2,
