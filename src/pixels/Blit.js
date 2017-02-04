@@ -1,5 +1,5 @@
-export function blit() {
-	constructor( canvas, x = 0, y = 0, width, height ) {
+export default class blit {
+	constructor( canvas, x = 0, y = 0, width = 0, height = 0 ) {
 		width = width || canvas.width;
 		height = height || canvas.height;
 		this.canvas = document.createElement( 'canvas' );

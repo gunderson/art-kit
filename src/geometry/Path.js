@@ -1,7 +1,59 @@
-import { midpoint } from './Point';
-import { lerp } from '../math/Range';
+import {
+	midpoint
+} from './Point';
+import {
+	dist
+} from '../position/Telemetrics';
+import {
+	lerp
+} from '../math/Range';
 
-export function length( path ) {}
+export default class Path {
+	constuctor( points = [] ) {
+		if ( points[ 0 ] && typeof points[ 0 ] === 'number' ) {
+			points = toPoints( points );
+		}
+		this.points = points;
+	}
+
+	[ Symbol.iterator ]() {
+		return this.points.values()
+	}
+
+	toJSON() {
+		return this.points;
+	}
+
+	toArray() {
+		return toArray( this.points );
+	}
+
+	toString() {
+		return JSON.stringify( this.toArray() );
+	}
+
+	interpolate( resolution = 2, returnFlat = false ) {
+		let pA = this.toArray();
+		let interpolatedPointArray = [];
+		for ( let i = 0; i < pA.length; i += 4 ) {
+			interpolatedPointArray.push.apply( interpolatedPointArray, interpolate( pA[ 0 ], pA[ 1 ], pA[ 2 ], pA[ 3 ], resolution ) );
+		}
+		return returnFlat ? interpolatedPointArray : toPoints( interpolatedPointArray );
+	}
+
+	concat( points = [] ) {
+		this.points = this.points.concat( points.obj );
+		return this;
+	}
+}
+
+export function length( path ) {
+	return path.reduce( ( m, p0, i, path ) => {
+		if ( i >= path.length - 1 ) return 0;
+		let p1 = path[ i + 1 ];
+		return dist( p0.x, p0.y, p1.x, p1.y );
+	}, 0 );
+}
 
 export function smooth( path, resolution, flatPath = false ) {
 	if ( flatPath ) path = toPoints( path );
@@ -22,14 +74,17 @@ export function smooth( path, resolution, flatPath = false ) {
 	return points;
 }
 
-export function toArray( path ) {
-	return path.reduce( ( arr, pt ) => arr.concat( pt.x, pt.y ), [] );
+export function toArray( flat ) {
+	return flat.reduce( ( arr, pt ) => arr.concat( pt.x, pt.y ), [] );
 }
 
 export function toPoints( path ) {
 	let arr = [];
 	for ( let i = 0, endi = path.length; i < endi; i += 2 ) {
-		arr.push( { x: path[ i ], y: path[ i + 1 ] } );
+		arr.push( {
+			x: path[ i ],
+			y: path[ i + 1 ]
+		} );
 	}
 	return arr;
 }
@@ -48,7 +103,10 @@ export function interpolate( x0, y0, x1, y1, resolution ) {
 export function cubicBezierPosition( x0, y0, x1, y1, x2, y2, t ) {
 	let x = ( 1 - t ) * ( 1 - t ) * x0 + 2 * ( 1 - t ) * t * x1 + t * t * x2;
 	let y = ( 1 - t ) * ( 1 - t ) * y0 + 2 * ( 1 - t ) * t * y1 + t * t * y2;
-	return { x, y };
+	return {
+		x,
+		y
+	};
 }
 
 export function cubicBezier( x0, y0, cpX, cpY, x1, y1, resolution ) {
