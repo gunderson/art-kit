@@ -1,38 +1,39 @@
 {
-  "name": "art-kit",
-  "version": "2.5.0",
-  "description": "A collection of helpers for making animations in the browser",
-  "jsnext:main": "index.js",
-  "browser": "./min/art-kit.min.js",
-  "main": "./min/art-kit.min.js",
-  "scripts": {
-    "build": "rollup -c"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/gunderson/art-kit.git"
-  },
-  "keywords": [
-    "netart",
-    "art",
-    "motion",
-    "browser art",
-    "animation",
-    "requestanimationframe",
-    "animation"
-  ],
-  "author": "Patrick Gunderson",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/gunderson/art-kit/issues"
-  },
-  "homepage": "https://github.com/gunderson/art-kit#readme",
-  "devDependencies": {
-    "babel-preset-es2015": "^6.18.0",
-    "babel-preset-es2015-rollup": "^3.0.0",
-    "rollup": "^0.41.1",
-    "rollup-plugin-babel": "^2.7.1",
-    "rollup-plugin-uglify": "^1.0.1",
-    "uglify": "^0.1.5"
-  }
+	"name": "art-kit",
+	"version": "2.5.0",
+	"description": "A collection of helpers for making animations in the browser",
+	"jsnext:main": "./src/index.js",
+	"browser": "./min/art-kit.min.js",
+	"main": "./min/art-kit.min.js",
+	"scripts": {
+		"build": "rollup -c"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/gunderson/art-kit.git"
+	},
+	"keywords": [
+		"netart",
+		"art",
+		"motion",
+		"browser art",
+		"telemetrics",
+		"animation",
+		"requestanimationframe",
+		"animation"
+	],
+	"author": "Patrick Gunderson",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/gunderson/art-kit/issues"
+	},
+	"homepage": "https://github.com/gunderson/art-kit#readme",
+	"devDependencies": {
+		"babel-preset-es2015": "^6.18.0",
+		"babel-preset-es2015-rollup": "^3.0.0",
+		"rollup": "^0.41.1",
+		"rollup-plugin-babel": "^2.7.1",
+		"rollup-plugin-uglify": "^1.0.1",
+		"uglify": "^0.1.5"
+	}
 }
