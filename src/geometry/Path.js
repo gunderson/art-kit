@@ -10,7 +10,7 @@ import {
 
 export default class Path {
 	constuctor( points = [] ) {
-		if ( points[ 0 ] && typeof points[ 0 ] === 'number' ) {
+		if ( points.length > 0 && typeof points[ 0 ] === 'number' ) {
 			points = toPoints( points );
 		}
 		this.points = points;
