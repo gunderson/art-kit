@@ -1,4 +1,5 @@
 const chalk = require( 'chalk' );
+const path = require( 'path' );
 
 function buffer( buf, val, bufferLength = buf.length ) {
 	if ( val ) {
@@ -17,7 +18,7 @@ function sampleFn( fn, period, numSamples ) {
 
 
 function log() {
-	return console.log.apply( console, [ `[ ${chalk.cyan('ART KIT')} ${chalk.gray(process.uptime)} ]` ].concat( arguments ) );
+	return console.log.apply( console, [ `[ ${chalk.cyan(path.basename(require.main.filename))} ${chalk.gray(process.uptime())} ]` ].concat( arguments ) );
 }
 
 module.exports = {
