@@ -1,15 +1,3 @@
-/* eslint-env es6 */
-module.exports = {
-	Crossed,
-	CrossedForward,
-	CrossedReverse,
-	Entered,
-	Hopped,
-	IsBetween,
-	Left,
-	TriggerBetween
-};
-
 export function TriggerBetween( x, px, start, end, onEntered, onLeft ) {
 	onEntered = onEntered || noop;
 	onLeft = onLeft || noop;

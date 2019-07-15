@@ -1,6 +1,10 @@
 #!/usr/bin/env node
 
-let log = require( '../Util' );
+// If you are running out of space, increase the max ram size (in MB):
+// $ node --max_old_space_size=8192
+
+let log = require( '../Util' )
+	.log;
 let fs = require( 'fs-extra-promise' );
 let path = require( 'path' );
 let yargs = require( 'yargs' );
@@ -9,6 +13,7 @@ let wav = require( 'node-wav' );
 let dsplib = require( 'dsp.js' );
 let DSP = dsplib.DSP;
 let FFT = dsplib.FFT;
+let Midi = require( 'jsmidgen' );
 
 // -----------------------------------------------------------------------
 // CLI
@@ -30,7 +35,7 @@ let argv = yargs.usage( '$0 [args]' )
 		},
 		'fps': {
 			alias: 'fps',
-			default: 60,
+			default: 64,
 			describe: 'output file path',
 			type: 'number'
 		},
@@ -54,8 +59,8 @@ let argv = yargs.usage( '$0 [args]' )
 		},
 		'outputFormat': {
 			alias: 'f',
-			default: 'json',
-			describe: 'json|bin',
+			default: 'bin',
+			describe: 'midi|json|bin',
 			type: 'string'
 		}
 
@@ -85,15 +90,15 @@ init();
 // Functions
 
 function init() {
-	console.log( `Reading file ${inputPath}` );
+	log( `Reading file ${inputPath}` );
 	fs.readFileAsync( inputPath )
 		.then( ( buffer ) => wav.decode( buffer ) )
 		.then( ( wav ) => {
 			samplesPerFrame = wav.sampleRate / fps;
 			// round up from samples per frame to the next power of 2
 			bufferSize = Math.pow( 2, Math.ceil( Math.log2( samplesPerFrame ) ) );
-			console.log( `Sample Rate: ${wav.sampleRate}` );
-			console.log( `Buffer Size: ${bufferSize}` );
+			log( `Sample Rate: ${wav.sampleRate}` );
+			log( `Buffer Size: ${bufferSize}` );
 			fft = new FFT( bufferSize, wav.sampleRate );
 			frameIndex = 0;
 			return wav;
@@ -102,27 +107,30 @@ function init() {
 		.then( smoothFFT )
 		.then( saveToDisk )
 		.then( () => {
-			console.log( "Operation Complete!" );
+			log( "Operation Complete!" );
 		} )
-		.catch( ( e ) => console.log( e ) );
+		.catch( ( e ) => log( e ) );
 }
 
 function saveToDisk( compressedSpectrum ) {
 	let maxPeak = compressedSpectrum.slice()
 		.sort( ( a, b ) => b - a )[ 0 ];
-	console.log( `Max Peak: ${maxPeak}` );
+	log( `Max Peak: ${maxPeak}` );
 	let normalizedCompressedSpectrum = compressedSpectrum.map( ( v ) => Math.floor( outputResolution * v / maxPeak ) );
-	console.log( 'Normalize Compressed Spectrum' )
+	let spectrumArrays = [];
+	log( 'Normalize Compressed Spectrum' );
 	let saveFilePromise, normalized;
 	switch ( outputFormat ) {
 		case 'png':
 			break;
 		case 'bin':
-			saveFilePromise = saveBinary( normalizedCompressedSpectrum );
+			saveFilePromise = saveBIN( normalizedCompressedSpectrum );
+			break;
+		case 'midi':
+			saveFilePromise = saveMIDI( normalizedCompressedSpectrum );
 			break;
 		case 'json':
 		default:
-			let spectrumArrays = [];
 			for ( var i = 0; i < normalizedCompressedSpectrum.length; i++ ) {
 				spectrumArrays[ i ] = normalizedCompressedSpectrum.slice( i * bufferSize, ( i + 1 ) * bufferSize );
 			}
@@ -130,16 +138,16 @@ function saveToDisk( compressedSpectrum ) {
 			break;
 	}
 	return saveFilePromise.then( () => {
-		console.log( `Spectrum saved to ${outputPath}` );
+		log( `Spectrum saved to ${outputPath}` );
 	} );
 }
 
-function saveJSON( normalizedSpectrum ) {
+function saveJSON( spectrumArrays ) {
 	return new Promise( ( resolve, reject ) => {
 		let transformStream = JSONStream.stringify();
 		let outputStream = fs.createWriteStream( outputPath );
 		transformStream.pipe( outputStream );
-		normalizedSpectrum.forEach( transformStream.write );
+		spectrumArrays.forEach( transformStream.write );
 		transformStream.end();
 		outputStream.on(
 			"finish",
@@ -148,84 +156,38 @@ function saveJSON( normalizedSpectrum ) {
 	} )
 }
 
-function saveBinary( normalizedCompressedSpectrum ) {
+function saveBIN( spectrumStream ) {
 	return new Promise( ( resolve, reject ) => {
-		/*
-		// meta byte order:
-		metaByteOrder = [ {
-			startIndex: 0,
-			length: 8,
-			type: 'fileType'
-		}, {
-			startIndex: 8,
-			length: 2,
-			type: 'total meta bytes'
-		},{
-			startIndex: 10,
-			length: 2,
-			type: 'output resolution'
-		},{
-			startIndex: 12,
-			length: 2,
-			type: 'total frames'
-		},{
-			startIndex: 14,
-			length: 2,
-			type: 'bins per frame'
-		},{
-			startIndex: 16,
-			length: 2,
-			type: 'frames per second'
-		},{
-			startIndex: 18,
-			length: 'up to 65518',
-			type: 'unused'
-		} ]
-		*/
-
-		console.log( 'Saving Binary' )
-
-		let fileType = str2codes( 'FTHd' );
-		let meta = [];
-		meta[ 0 ] = meta.length * 2;
-		meta[ 1 ] = outputResolution;
-		meta[ 2 ] = normalizedCompressedSpectrum.length / bufferSize;
-		meta[ 3 ] = bufferSize;
-		meta[ 4 ] = fps;
-
-		console.log( 'create file array', fileType.length * 2, meta.length * 2, normalizedCompressedSpectrum.length * 2 )
-		let fileBytes = new Uint8Array( fileType.length * 2 + meta.length * 2 + normalizedCompressedSpectrum.length * 2 );
-		// copy the values
-		let byteIndex = 0;
-		// header
-		console.log( 'copy header' )
-		let fileType8 = new Uint8Array( Uint16Array.from( fileType )
-			.buffer );
-		console.log( fileBytes.length, fileType8.length )
-
-		fileBytes.set( fileType8, byteIndex );
-		byteIndex += fileType8.length;
-		// meta
-		console.log( 'copy meta' )
-		let meta8 = new Uint8Array( Uint16Array.from( meta )
-			.buffer );
-		fileBytes.set( meta8, byteIndex );
-		byteIndex += meta8.length;
-		// spectrum
-		console.log( 'copy dataset' )
-		let spectrum8 = new Uint8Array( Uint16Array.from( normalizedCompressedSpectrum )
-			.buffer );
-		fileBytes.set( spectrum8, byteIndex );
+		// flatten the arrays for each frame
+		let fileBytes = Uint16Array.from( spectrumStream );
 
 		let filename = path.basename( outputPath )
-			.split( '.' )[ 0 ] + '.ft';
+			.split( '.' )[ 0 ] + '.fftbin';
 		let fileAddress = path.join( path.dirname( outputPath ), filename );
-		console.log( 'Writing binary file', fileAddress );
+		log( 'Writing Binary file', fileAddress );
 		// write file
 		return fs.writeFileAsync( fileAddress, Buffer.from( fileBytes.buffer ), {
 			encoding: 'binary'
 		} );
+	} )
+}
 
+function saveMIDI( spectrumArrays ) {
+	return new Promise( ( resolve, reject ) => {
+		let midiFile = getMidiFile( spectrumArrays );
+		log( 'Building MIDI. This may take a while...' );
+		let fileBytes = Uint8Array.from( midiFile.toBytes() );
+
+		log( 'opening:', fileBytes.slice( 4 ) );
+
+		let filename = path.basename( outputPath )
+			.split( '.' )[ 0 ] + '.mid';
+		let fileAddress = path.join( path.dirname( outputPath ), filename );
+		log( 'Writing MIDI file', fileAddress );
+		// write file
+		return fs.writeFileAsync( fileAddress, Buffer.from( fileBytes.buffer ), {
+			encoding: 'binary'
+		} );
 	} )
 }
 
@@ -247,7 +209,7 @@ function computeFFT( wav ) {
 }
 
 function smoothFFT( spectrum ) {
-	console.log( 'smoothFFT', smoothingFactor );
+	log( 'smoothFFT', smoothingFactor );
 	return spectrum.map( ( value, i ) => {
 		let frame_offset = 0;
 		while ( ++frame_offset < smoothingFactor && i - ( frame_offset * bufferSize ) >= 0 ) {
@@ -259,7 +221,7 @@ function smoothFFT( spectrum ) {
 }
 
 function getNextFrameBuffer( wav, frameIndex = 0 ) {
-	// console.log( `Rendering Frame ${frameIndex}` );
+	// log( `Rendering Frame ${frameIndex}` );
 	var startIndex = frameIndex * samplesPerFrame;
 	return [
 		wav.channelData[ 0 ].slice( startIndex, startIndex + bufferSize ),
@@ -289,6 +251,30 @@ function computeFFTFrame( channelSignals ) {
 	fft.forward( signal );
 
 	return fft.spectrum;
+}
+
+function getMidiFile( spectrumArrays ) {
+	let ticksPerBeat = 128; // hard coded in jsmidgen
+	let ticksPerMin = fps * 60;
+	let bpm = ticksPerMin / ticksPerBeat;
+	let file = new Midi.File();
+	let track = new Midi.Track();
+	file.addTrack( track );
+	track.setTempo( bpm );
+
+	for ( let tick = 0; tick < spectrumArrays.length; tick++ ) {
+		if ( tick % 10000 == 0 ) {
+			log( `${Math.floor(100 * tick / spectrumArrays.length)}% complete` )
+		}
+		track.addEvent(
+			new Midi.MetaEvent( {
+				time: 1,
+				type: 0x7F, // custom event
+				data: [ 0x00 ].concat( spectrumArrays[ tick ] ) // first byte is device mfg id, use 0x00 for generic
+			} )
+		);
+	}
+	return file;
 }
 
 function averageArrays( a, b ) {

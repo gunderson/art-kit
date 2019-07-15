@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Animation Player Example</title>
+	<style>
+		html,
+		body {
+			font-size: 1px;
+		}
+
+		.transport {
+			width: 500rem;
+		}
+
+		.transport .progress-bar {
+			width: 100%;
+			height: 5rem;
+			position: relative;
+			background: #444;
+		}
+
+		.transport .progress-bar .complete-bar {
+			width: 100%;
+			height: 100%;
+			position: absolute;
+			top: 0;
+			left: 0;
+			display: none;
+			background: #800;
+		}
+
+		.transport .progress-bar .scrubber {
+			width: 10rem;
+			height: 10rem;
+			position: absolute;
+			top: 0;
+			left: 0;
+			display: none;
+			transform: translate3d(-50%, -25%, 0);
+			border-radius: 100%;
+			background: #888;
+		}
+
+		.transport .play-pause-button {
+			display: inline-block;
+			font-size: 18rem;
+		}
+
+		.transport .play-pause-button .pause-button {
+			display: none;
+		}
+
+		.transport .time-display {
+			display: inline-block;
+			font-size: 18rem;
+		}
+
+		.transport .time-display .time-separator,
+		.transport .time-display .total-time {
+			display: none;
+		}
+
+		.box-0 {
+			width: 100rem;
+			height: 100rem;
+			background: #800;
+			display: none;
+		}
+
+	</style>
+</head>
+
+<body>
+	<div class="transport">
+		<div class="progress-bar">
+			<div class="complete-bar"></div>
+			<div class="scrubber"></div>
+		</div>
+		<div class="play-pause-button">
+			<span class="play-button">Play</span>
+			<span class="pause-button">Pause</span>
+		</div>
+		<div class="time-display"><span class="current-time">0:00</span><span class="time-separator">/</span><span class="total-time">0:00</span></div>
+	</div>
+	<div class='box-0'></div>
+</body>
+<script src="index.js" type="module"></script>
+
+</html>

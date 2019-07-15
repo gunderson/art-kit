@@ -1,0 +1,1 @@
+node ../../src/preprocessing/RenderFFT.js -i ae.wav
